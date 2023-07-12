@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navig_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.example.presentation.mvvm_single_activity.fragment.mainMenu.MainMenuFragment"
+        android:label="@string/main_menu_string"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_createPlayerFragment"
+            app:destination="@id/createPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPlayerFragment"
+        android:name="com.example.presentation.mvvm_single_activity.fragment.createPalyer.CreatePlayerFragment"
+        android:label="@string/create_player_string"
+        tools:layout="@layout/fragment_create_player" >
+        <action
+            android:id="@+id/action_createPlayerFragment_to_battlefieldFragment"
+            app:destination="@id/battlefieldFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/battlefieldFragment"
+        android:name="com.example.presentation.mvvm_single_activity.fragment.battlefield.BattlefieldFragment"
+        android:label="@string/battlefield_string"
+        tools:layout="@layout/fragment_battlefield" >
+        <argument
+            android:name="name_player1"
+            app:argType="string"
+            android:defaultValue="player1" />
+        <argument
+            android:name="name_player2"
+            app:argType="string"
+            android:defaultValue="player2" />
+    </fragment>
+</navigation>

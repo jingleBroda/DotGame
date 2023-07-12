@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DotGameView">
+        <attr name="player1Color" format="color"/>
+        <attr name="player2Color" format="color"/>
+        <attr name="gridDotGameColor" format="color"/>
+    </declare-styleable>
+
+    <attr name="dotGameFieldStyle" format="reference"/>
+</resources>

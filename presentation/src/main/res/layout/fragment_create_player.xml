@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="32dp"
+    tools:context=".mvvm_single_activity.fragment.createPalyer.CreatePlayerFragment">
+
+
+    <TextView
+        android:id="@+id/namePlayer1Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/player1_string" />
+
+    <EditText
+        android:id="@+id/editNamePlayer1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/player1_string" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="32dp" />
+
+    <TextView
+        android:id="@+id/namePlayer2Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/player2_string" />
+
+    <EditText
+        android:id="@+id/editNamePlayer2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:hint="@string/player2_string" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/startGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_game_string" />
+
+</LinearLayout>

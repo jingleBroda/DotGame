@@ -1,0 +1,12 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_menu_string">Main menu</string>
+    <string name="create_player_string">Create players</string>
+    <string name="battlefield_string">Battlefield</string>
+    <string name="new_game_string">New game</string>
+    <string name="exit_string">Exit</string>
+    <string name="player1_string">Name player 1</string>
+    <string name="player2_string">Name player 2</string>
+    <string name="start_game_string">Start game</string>
+</resources>

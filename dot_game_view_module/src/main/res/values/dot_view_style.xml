@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DefaultDotGameStyle">
+        <item name="player1Color">@color/red</item>
+        <item name="player2Color">@color/blue</item>
+        <item name="gridDotGameColor">@color/darkGrey</item>
+    </style>
+
+    <style name="GlobalDotGameStyle" parent="DefaultDotGameStyle"/>
+</resources>
