@@ -1,7 +1,5 @@
 package com.example.dot_game_view_module
 
-import android.util.Log
-
 //храним состояния ячеек
 
 enum class Dot{

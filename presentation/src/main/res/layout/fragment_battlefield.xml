@@ -7,31 +7,57 @@
     tools:context=".mvvm_single_activity.fragment.battlefield.BattlefieldFragment">
 
     <TextView
-        android:id="@+id/player1Counter"
+        android:id="@+id/player1Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="0"
+        android:text="player1Name:"
+        android:textColor="@color/red"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/player1Counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="0"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="@+id/player1Name"
+        app:layout_constraintStart_toEndOf="@+id/player1Name"
+        app:layout_constraintTop_toTopOf="@+id/player1Name" />
+
+    <TextView
+        android:id="@+id/player2Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="player2Name:"
+        android:textColor="@color/blue"
+        app:layout_constraintBottom_toBottomOf="@+id/player2Counter"
+        app:layout_constraintEnd_toStartOf="@+id/player2Counter"
+        app:layout_constraintTop_toTopOf="@+id/player2Counter" />
+
+    <TextView
+        android:id="@+id/player2Counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="0"
+        android:textColor="@color/blue"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.dot_game_view_module.DotGameView
         android:id="@+id/battlefieldView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player1Counter" />
-
-    <TextView
-        android:id="@+id/player2Counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/player1Counter" />
+        app:layout_constraintTop_toBottomOf="@+id/player1Name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

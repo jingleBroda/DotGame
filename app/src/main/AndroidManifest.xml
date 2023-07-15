@@ -6,15 +6,16 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/dot_ic"
         android:label="@string/app_name"
         android:name="com.example.dotGame.dagger2.App"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/dot_ic_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dot_Game"
         tools:targetApi="33">
         <activity android:name="com.example.presentation.mvvm_single_activity.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -1,6 +1,5 @@
 package com.example.presentation.mvvm_single_activity.fragment.battlefield
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -16,17 +15,13 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
     private val args:BattlefieldFragmentArgs by navArgs()
     private var isFirstPlayer = true
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentBattlefieldBinding.bind(view)
 
-        Toast.makeText(
-            requireContext(),
-            "Играет ${args.namePlayer1} против ${args.namePlayer2}",
-            Toast.LENGTH_SHORT
-        ).show()
-
         with(binding){
+            val namePlayerTemplate = getString(R.string.player_name_string)
+            player1Name.text = String.format(namePlayerTemplate, args.namePlayer1)
+            player2Name.text = String.format(namePlayerTemplate, args.namePlayer2)
             battlefieldView.dotGameField = DotGameField()
             battlefieldView.actionListener = { row,column,field->
                 val point = field.getDot(row,column)

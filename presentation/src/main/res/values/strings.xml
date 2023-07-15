@@ -9,4 +9,5 @@
     <string name="player1_string">Name player 1</string>
     <string name="player2_string">Name player 2</string>
     <string name="start_game_string">Start game</string>
+    <string name="player_name_string" translatable="false">%s :</string>
 </resources>
