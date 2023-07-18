@@ -312,7 +312,7 @@ class DotGameView(
             val currentPointY = firstPointY+(cellSize*row)
             for(colum in 0 until field.columnsPoints){
                 val currentPointX = firstPointX+(cellSize*colum)
-                if(field.getDot(row, colum) != Dot.EMPTY){
+                if(field.getDot(row, colum) != Dot.EMPTY && field.getDot(row, colum) != Dot.EMPTY_CLOSED){
                     arrayDotPixels[row][colum] = DotPixels(
                         row,
                         colum,
@@ -620,7 +620,7 @@ class DotGameView(
             color = polygon.first().ownerPlayer
             //сортируем полигон, чтобы проще находить потенциальные точки полигона для окружения
             val sortPolygon = polygon.sortedWith(compareBy<DotPixels>{it.row}.thenBy { it.column })
-            //находим область точек, которые будем проверять
+            //находим область точек, которую будем проверять
             var minRow =  field.rowsPoints
             var minColumn =  field.columnsPoints
             var maxRow = -1
@@ -635,54 +635,20 @@ class DotGameView(
             for(currentRow in minRow..maxRow){
                 for(currentColumn in minColumn..maxColumn){
                     val currentDotColor = field.getDot(currentRow, currentColumn)
-                    val currentDot = arrayDotPixels[currentRow][currentColumn] ?: continue
-                    if(
-                        currentDotColor != Dot.EMPTY &&
-                        currentDotColor != color &&
-                        !sortPolygon.contains(currentDot)
-                    ){
-                        //если точка подходит под определение вражеской:
-                        //ищем точки полигона, которые потенциально могут ограничить точку противника
-                        val dot1Horizontal = sortPolygon.firstOrNull{
-                            it.row == currentRow
-                        }
-                        val dot2Horizontal = sortPolygon.lastOrNull{
-                            dot1Horizontal != null &&
-                            it.row == currentRow &&
-                            it != dot1Horizontal &&
-                            it.column > dot1Horizontal.column
-                        }?:
-                        sortPolygon.lastOrNull{
-                            dot1Horizontal != null &&
-                            it.row == currentRow &&
-                            it != dot1Horizontal &&
-                            it.column < dot1Horizontal.column
-                        }
-                        val dot1Vertical = sortPolygon.firstOrNull{
-                            it.column == currentColumn
-                        }
-                        val dot2Vertical = sortPolygon.lastOrNull{
-                            dot1Vertical != null &&
-                            it.column == currentColumn &&
-                            it != dot1Vertical &&
-                            it.row > dot1Vertical.row
-                        } ?:
-                        sortPolygon.lastOrNull{
-                            dot1Vertical != null &&
-                            it.column == currentColumn &&
-                            it != dot1Vertical &&
-                            it.row < dot1Vertical.row
-                        }
 
-                        if(dot2Horizontal != null && dot2Vertical!= null){
-                            if(
-                                ((dot1Horizontal!!.column<currentDot.column && currentDot.column<dot2Horizontal.column) ||
-                                 (dot1Horizontal.column>currentDot.column && currentDot.column>dot2Horizontal.column)) &&
-                                ((dot1Vertical!!.row<currentDot.row && currentDot.row<dot2Vertical.row) ||
-                                 (dot1Vertical.row>currentDot.row && currentDot.row>dot2Vertical.row))
-                            ){
-                                currentNumbEnemyDot++
-                            }
+                    if(currentDotColor != Dot.EMPTY) {
+                        arrayDotPixels[currentRow][currentColumn] ?: continue
+                        //если точка вражеская, проверяем окружена ли она полигоном
+                        if(
+                            currentDotColor != color &&
+                            checkClosedDot(sortPolygon, currentRow, currentColumn)
+                        ){
+                            currentNumbEnemyDot++
+                        }
+                    }
+                    else{
+                        if(checkClosedDot(sortPolygon, currentRow, currentColumn)){
+                            field.setDot(currentRow, currentColumn, Dot.EMPTY_CLOSED)
                         }
                     }
                 }
@@ -693,6 +659,54 @@ class DotGameView(
         }
         captureCounterListener?.invoke(Dot.PLAYER_1, numbEnemyDotPlayer1)
         captureCounterListener?.invoke(Dot.PLAYER_2, numbEnemyDotPlayer2)
+    }
+
+    private fun checkClosedDot(
+        sortPolygon:List<DotPixels>,
+        currentRow:Int,
+        currentColumn:Int,
+    ):Boolean{
+        //если точка подходит под определение вражеской:
+        //ищем точки полигона, которые потенциально могут ограничить точку противника
+        val dot1Horizontal = sortPolygon.firstOrNull{
+            it.row == currentRow
+        }
+        val dot2Horizontal = sortPolygon.lastOrNull{
+            dot1Horizontal != null &&
+                    it.row == currentRow &&
+                    it != dot1Horizontal &&
+                    it.column > dot1Horizontal.column
+        }?:
+        sortPolygon.lastOrNull{
+            dot1Horizontal != null &&
+                    it.row == currentRow &&
+                    it != dot1Horizontal &&
+                    it.column < dot1Horizontal.column
+        }
+        val dot1Vertical = sortPolygon.firstOrNull{
+            it.column == currentColumn
+        }
+        val dot2Vertical = sortPolygon.lastOrNull{
+            dot1Vertical != null &&
+                    it.column == currentColumn &&
+                    it != dot1Vertical &&
+                    it.row > dot1Vertical.row
+        } ?:
+        sortPolygon.lastOrNull{
+            dot1Vertical != null &&
+                    it.column == currentColumn &&
+                    it != dot1Vertical &&
+                    it.row < dot1Vertical.row
+        }
+
+        return if(dot2Horizontal != null && dot2Vertical!= null){
+            ((dot1Horizontal!!.column<currentColumn && currentColumn<dot2Horizontal.column) ||
+            (dot1Horizontal.column>currentColumn && currentColumn>dot2Horizontal.column)) &&
+            ((dot1Vertical!!.row<currentRow && currentRow<dot2Vertical.row) ||
+            (dot1Vertical.row>currentRow && currentRow>dot2Vertical.row))
+        } else{
+            false
+        }
     }
 
     override fun performClick(): Boolean {

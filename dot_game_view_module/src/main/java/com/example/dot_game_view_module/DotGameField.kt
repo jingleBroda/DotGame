@@ -5,7 +5,8 @@ package com.example.dot_game_view_module
 enum class Dot{
     PLAYER_1,
     PLAYER_2,
-    EMPTY
+    EMPTY,
+    EMPTY_CLOSED
 }
 
 //слушатель нажатия на ячейку с рисованием точки
@@ -36,7 +37,7 @@ class DotGameField(
             dots[row][column] = dot
             currentDotRow = row
             currentDotColumn = column
-            listener.forEach{ it?.invoke(this) }
+            if(dot != Dot.EMPTY_CLOSED) listener.forEach{ it?.invoke(this) }
         }
     }
 
