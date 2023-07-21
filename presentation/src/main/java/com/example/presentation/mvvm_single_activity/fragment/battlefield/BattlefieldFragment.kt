@@ -1,5 +1,6 @@
 package com.example.presentation.mvvm_single_activity.fragment.battlefield
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,11 +10,13 @@ import com.example.dot_game_view_module.DotGameField
 import com.example.presentation.R
 import com.example.presentation.databinding.FragmentBattlefieldBinding
 import com.example.presentation.mvvm_single_activity.utils.baseFragment.BaseFragment
+import kotlin.properties.Delegates
 
 class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
     private lateinit var binding:FragmentBattlefieldBinding
     private val args:BattlefieldFragmentArgs by navArgs()
-    private var isFirstPlayer = true
+    private var isFirstPlayer by Delegates.notNull<Boolean>()
+    private lateinit var dotGameField:DotGameField
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentBattlefieldBinding.bind(view)
@@ -22,7 +25,7 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
             val namePlayerTemplate = getString(R.string.player_name_string)
             player1Name.text = String.format(namePlayerTemplate, args.namePlayer1)
             player2Name.text = String.format(namePlayerTemplate, args.namePlayer2)
-            battlefieldView.dotGameField = DotGameField()
+            battlefieldView.dotGameField = dotGameField
             battlefieldView.actionListener = { row,column,field->
                 val point = field.getDot(row,column)
                 if(point == Dot.EMPTY){
@@ -58,7 +61,31 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
         super.onViewCreated(view, savedInstanceState)
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        isFirstPlayer = savedInstanceState?.getBoolean(KEY_TURN_PLAYER) ?: true
+        dotGameField = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            savedInstanceState?.getParcelable(KEY_FIELD, DotGameField.Memento::class.java)?.restoreField() ?: DotGameField()
+        } else{
+            savedInstanceState?.getParcelable<DotGameField.Memento>(KEY_FIELD)?.restoreField() ?: DotGameField()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val field = binding.battlefieldView.dotGameField
+        val saveLines = binding.battlefieldView.createSaveExistingLinesList()
+        outState.putParcelable(KEY_FIELD, field!!.saveState(saveLines))
+        outState.putBoolean(KEY_TURN_PLAYER, isFirstPlayer)
+    }
+
     override fun onClick(v: View?) {
         TODO("Not yet implemented")
+    }
+
+    companion object{
+        private const val KEY_FIELD = "KEY_FIELD"
+        private const val KEY_TURN_PLAYER = "KEY_TURN_PLAYER"
     }
 }

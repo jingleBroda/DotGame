@@ -57,11 +57,13 @@ class DotGameView(
             requestLayout()
             invalidate()
         }
+
     private var arrayDotPixels:Array<Array<DotPixels?>> = Array(dotGameField?.rowsPoints?:0){
         Array(dotGameField?.columnsPoints?:0){
             null
         }
     }
+
     private val listLine = mutableListOf<Line>()
     private var setPolygons = mutableSetOf<Set<DotPixels>>()
     var actionListener:OnPointActionListener? = null
@@ -85,9 +87,9 @@ class DotGameView(
     private lateinit var player2LinePaint:Paint
 
     constructor(context: Context,attrSet:AttributeSet?, defStyleAttr:Int):
-            this(context, attrSet, defStyleAttr,R.style.GlobalDotGameStyle)
+            this(context, attrSet, defStyleAttr, R.style.GlobalDotGameStyle)
     constructor(context: Context, attrSet: AttributeSet?):
-            this(context, attrSet,R.attr.dotGameFieldStyle)
+            this(context, attrSet, R.attr.dotGameFieldStyle)
     constructor(context: Context):
             this(context, null)
     init{
@@ -335,10 +337,26 @@ class DotGameView(
     private fun drawDotConnection(canvas:Canvas){
         val field = this.dotGameField ?: return
         val current:DotPixels = arrayDotPixels[field.getCurrentDotRow()][field.getCurrentDotColumn()] ?: return
+        //если у нас сработало сохранения состояния, то делаем проверку на наличие сохраненных линий
+        initLineList(field.saveExistingLines)
         //рисуем существующие линии
         drawOldLine(canvas)
         //ищем новые соединительные линии
         searchAndDrawNewLine(canvas,field,current)
+    }
+
+    private fun initLineList(saveLines:List<DotGameField.SaveLine>?){
+        if(saveLines == null) return
+        if(listLine.isNotEmpty()) return
+        saveLines.forEach { saveLine->
+            listLine.add(
+                Line(
+                    arrayDotPixels[saveLine.startDotRow][saveLine.startDotColumn]!!,
+                    arrayDotPixels[saveLine.endDotRow][saveLine.endDotColumn]!!,
+                    arrayDotPixels[saveLine.startDotRow][saveLine.startDotColumn]!!.ownerPlayer
+                )
+            )
+        }
     }
 
     private fun drawOldLine(canvas:Canvas){
@@ -738,6 +756,21 @@ class DotGameView(
 
     private fun getColumn(event: MotionEvent):Int =
         ((event.x-pointRect.left)/cellSize).toInt()
+
+    fun createSaveExistingLinesList():List<DotGameField.SaveLine>{
+        val result = mutableListOf<DotGameField.SaveLine>()
+        listLine.forEach { line->
+            result.add(
+                DotGameField.SaveLine(
+                    line.dotStart.row,
+                    line.dotStart.column,
+                    line.dotEnd.row,
+                    line.dotEnd.column,
+                )
+            )
+        }
+        return result
+    }
 
     private val listener:OnFieldChangeListener = {
         invalidate()
