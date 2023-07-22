@@ -10,4 +10,5 @@
     <string name="player2_string">Name player 2</string>
     <string name="start_game_string">Start game</string>
     <string name="player_name_string" translatable="false">%s :</string>
+    <string name="end_game">End game</string>
 </resources>

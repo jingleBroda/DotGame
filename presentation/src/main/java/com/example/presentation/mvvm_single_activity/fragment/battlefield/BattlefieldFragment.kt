@@ -25,6 +25,7 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
             val namePlayerTemplate = getString(R.string.player_name_string)
             player1Name.text = String.format(namePlayerTemplate, args.namePlayer1)
             player2Name.text = String.format(namePlayerTemplate, args.namePlayer2)
+
             battlefieldView.dotGameField = dotGameField
             battlefieldView.actionListener = { row,column,field->
                 val point = field.getDot(row,column)
@@ -37,30 +38,30 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
                         true
                     }
                 }
-                if(field.gameOverProgress()){
-                    Toast.makeText(
-                        requireContext(),
-                        "GAME OVER!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    activity?.onBackPressedDispatcher?.onBackPressed()
-                }
+                if(field.gameOverProgress()) endGame()
             }
             battlefieldView.captureCounterListener = {color, numbCounter->
                 if(color == Dot.PLAYER_1){
-                    player1Counter.text =
-                        "$numbCounter"
+                    player1Counter.text = "$numbCounter"
                 }
                 else{
-                    player2Counter.text =
-                        "$numbCounter"
+                    player2Counter.text = "$numbCounter"
                 }
             }
+            earlyEndGame.setOnClickListener(this@BattlefieldFragment)
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
 
+    private fun endGame(){
+        Toast.makeText(
+            requireContext(),
+            "GAME OVER!",
+            Toast.LENGTH_SHORT
+        ).show()
+        activity?.onBackPressedDispatcher?.onBackPressed()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,8 +81,10 @@ class BattlefieldFragment : BaseFragment(R.layout.fragment_battlefield) {
         outState.putBoolean(KEY_TURN_PLAYER, isFirstPlayer)
     }
 
-    override fun onClick(v: View?) {
-        TODO("Not yet implemented")
+    override fun onClick(v: View) {
+        when(v.id){
+            R.id.early_end_game-> endGame()
+        }
     }
 
     companion object{

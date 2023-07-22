@@ -9,4 +9,5 @@
     <string name="player1_string">Имя игрока 1</string>
     <string name="player2_string">Имя игрока 2</string>
     <string name="start_game_string">Начать игру</string>
+    <string name="end_game">Конец игры</string>
 </resources>
